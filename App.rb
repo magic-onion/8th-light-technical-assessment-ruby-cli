@@ -42,7 +42,6 @@ class App
       when "view reading list" then view_reading_list
       when "NUKE MY LIST" then clear_pstore_data
       when "exit" then exit
-        break
     else
       puts "\nsorry, I'm not sure what that means"
       menu_prompt
