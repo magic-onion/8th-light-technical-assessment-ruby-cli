@@ -18,4 +18,9 @@ run the command "bundle install" (previous installation of ruby required)
 
 This API Key is restricted to the Google Books API
 
+**To Run**
+
+simply use the command "ruby run.rb" on the command line after installation.
+
+
 I hope you enjoy it!
