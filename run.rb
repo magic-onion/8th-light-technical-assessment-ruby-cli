@@ -49,18 +49,35 @@ class App
   end
 
   def reading_list_prompt
-    puts "\nSelect a number (1-5) to add to your reading list, or enter `go back` to reach the main menu"
-    input = gets.chomp
-    handle_save(input)
+    input = ""
+    prompt = "\nSelect a number (1-5) to add to your reading list, or enter `go back` to reach the main menu"
+    while input
+      puts prompt
+      input = gets.chomp
+      if ((1..5).include?(input.to_i)) then handle_save(input)
+      else
+        case input
+        when "go back" then run_list
+        when "exit" then exit
+        else
+          system("clear")
+          puts "\nApologies, that input is not recognized"
+          generate_output(@search_results)
+        end
+      end
+    end
   end
 
   def handle_save(input)
+    puts input.class
     selection = input.to_i - 1
     @store.transaction do
       @store[:saved_books].push(@search_results[selection])
-      puts @store[:saved_books]
       @store.commit
     end
+    puts "\n Saved to your list!"
+    puts "\n\n\n\n\n\nSearch Results:"
+    generate_output(@search_results)
   end
 
   def searcher(input) #handles the search
@@ -68,7 +85,6 @@ class App
     response = RestClient.get(url)
     hash = JSON.parse(response)
     (response.code === 200 && hash["totalItems"] != 0)  ? sanitizer(hash) : (puts "no results found, please try again \n")
-
   end
 
 
@@ -86,8 +102,9 @@ class App
 
   def view_reading_list
     @store.transaction do
-      puts "in transaction"
-      puts @store[:saved_books]
+      puts "\n your Current Reading List \n"
+      generate_output(@store[:saved_books])
+      puts "\n"
     end
   end
 
@@ -150,7 +167,13 @@ class App
     book
   end
 
+  def search_results_setter(array)
+    @search_results = array
+  end
 
+  def clear_search_results
+    @search_results = []
+  end
 
 
 
