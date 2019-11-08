@@ -17,3 +17,5 @@ CD into directory
 run the command "bundle install" (previous installation of ruby required)
 
 This API Key is restricted to the Google Books API
+
+I hope you enjoy it!
