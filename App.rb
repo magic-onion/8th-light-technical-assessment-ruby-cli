@@ -4,13 +4,12 @@ require_relative './modules/data_handler'
 
 class App
 
-  include ApiAdapter
+  include ApiAdapter #helpers to better separate method responsibilities
   include DataHandler
 
   def initialize()
-    @search_results
-    @search_result_strings
-    @store = PStore.new('store.pstore')
+    @search_results #temporary storage of search results
+    @store = PStore.new('store.pstore') #creates persistent reading list
     @store.transaction do
       @store.abort if @store[:saved_books].length > 0
       @store[:saved_books] = []
@@ -27,7 +26,7 @@ class App
   def menu_prompt
     puts "\nPlease Enter one of the Commands Listed Here"
     puts "\nenter 'search books' to query the Google Books API"
-    puts "\nenter 'view reading list' to view your reading list"
+    puts "\nenter 'view list' to view your reading list"
     puts "\nenter 'exit' to exit this session"
   end
 
@@ -38,18 +37,18 @@ class App
       puts "\nPlease enter a command", ""
       input = gets.chomp
       case input
-      when "search books" then search_menu
-      when "view reading list" then view_reading_list
-      when "NUKE MY LIST" then clear_pstore_data
-      when "exit" then exit
+        when "search books" then search_menu
+        when "view list" then view_reading_list
+        when "CLEAR LIST" then clear_pstore_data #helpful for testing purposes, not listed to "casual" user
+        when "exit" then exit
     else
-      puts "\nsorry, I'm not sure what that means"
+      puts "\nApologies, that input is not recognized"
       menu_prompt
       end
     end
   end
 
-  def search_menu
+  def search_menu #calls on ApiAdapter and DataHandler modules
     puts "Type in a query to search the Google Books Api by Publication Title \n"
     input = gets.chomp
     puts "\n Now Searching..."
@@ -86,7 +85,7 @@ class App
     end
   end
 
-  def handle_save(input)
+  def handle_save(input) #saves item from instance variable, displays confirmation, and directs to menu
     selection = input.to_i - 1
     @store.transaction do
       @store[:saved_books].push(@search_results[selection])
@@ -98,37 +97,43 @@ class App
     reading_list_prompt
   end
 
-  def generate_output(array)
+
+  def view_reading_list
+    system("clear")
+    @store.transaction do
+      if @store[:saved_books].length === 0
+        puts "\n No Books Currently Saved to Your Reading List"
+        @store.abort
+      else
+        puts "\n your Current Reading List \n"
+        generate_output(@store[:saved_books])
+        puts "\n"
+      end
+      end
+    menu_prompt
+  end
+
+  def generate_output(array) #general method to display sanitized data from an array of hashes
     i = 1
     array.each do |hash|
       puts "\n #{i}. Title: #{hash[:title]} ||| Author: #{hash[:author]} ||| Publisher: #{hash[:publisher] }\n \n"
       i += 1
     end
-
   end
-
-  def view_reading_list
-    system("clear")
-    @store.transaction do
-      puts "\n your Current Reading List \n"
-      generate_output(@store[:saved_books])
-      puts "\n"
-    end
-    menu_prompt
-  end
-
 
   def exit
     puts "now exiting gracefully"
     exit!
   end
 
+  #helper functions for Pstore
   def clear_pstore_data
     @store.transaction do
       @store[:saved_books] = []
       @store.commit
     end
   end
+
 
   def search_results_setter(array)
     @search_results = array
