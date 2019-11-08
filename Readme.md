@@ -1,4 +1,4 @@
-# 8th Light Code Submission - ruby - Alexander Truong
+# 8th Light Code Submission - Ruby
 
 Hello, and thanks for using my cli
 
