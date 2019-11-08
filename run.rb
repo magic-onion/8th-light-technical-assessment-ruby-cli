@@ -2,10 +2,19 @@ require_relative './environment'
 
 require 'rest-client'
 require 'json'
+require 'pstore'
 
 class App
 
-  def initialize
+  def initialize()
+    @search_results
+    @search_result_strings
+    @store = PStore.new('store.pstore')
+    @store.transaction do
+      @store.abort if @store[:saved_books].length > 0
+      @store[:saved_books] = []
+      @store.commit
+    end
   end
 
   def launch
@@ -20,6 +29,7 @@ class App
       case input
       when "search books" then search_menu
       when "view reading list" then view_reading_list
+      when "NUKE MY LIST" then clear_pstore_data
       when "exit" then exit
         break
       else puts "sorry, I'm not sure what that means"
@@ -28,11 +38,29 @@ class App
     run_list
   end
 
+
+
   def search_menu
     puts "Type in a query to search the Google Books Api by Publication Title \n"
     input = gets.chomp
     searcher(input)
     puts "done searching \n"
+    reading_list_prompt
+  end
+
+  def reading_list_prompt
+    puts "\nSelect a number (1-5) to add to your reading list, or enter `go back` to reach the main menu"
+    input = gets.chomp
+    handle_save(input)
+  end
+
+  def handle_save(input)
+    selection = input.to_i - 1
+    @store.transaction do
+      @store[:saved_books].push(@search_results[selection])
+      puts @store[:saved_books]
+      @store.commit
+    end
   end
 
   def searcher(input) #handles the search
@@ -42,6 +70,41 @@ class App
     (response.code === 200 && hash["totalItems"] != 0)  ? sanitizer(hash) : (puts "no results found, please try again \n")
 
   end
+
+
+
+
+
+  def generate_output(array)
+    i = 1
+    array.each do |hash|
+      puts "\n #{i}. Title: #{hash[:title]} ||| Author: #{hash[:author]} ||| Publisher: #{hash[:publisher] }\n \n"
+      i += 1
+    end
+
+  end
+
+  def view_reading_list
+    @store.transaction do
+      puts "in transaction"
+      puts @store[:saved_books]
+    end
+  end
+
+
+  def exit
+    puts "now exiting gracefully"
+    exit!
+  end
+
+  def clear_pstore_data
+    @store.transaction do
+      @store[:saved_books] = []
+      @store.commit
+    end
+  end
+
+
 
 
   def sanitizer(hash) #only cleans the data
@@ -69,6 +132,7 @@ class App
       puts "length of array is: #{hash["items"].length} \n"
     end
     puts "length of array is: #{sanitized_data.length} \n"
+    @search_results = sanitized_data
     generate_output(sanitized_data)
   end
 
@@ -87,24 +151,21 @@ class App
   end
 
 
-  def generate_output(array)
-    i = 1
-    array.each do |hash|
-      puts "\n #{i}. Title: #{hash[:title]} ||| Author: #{hash[:author]} ||| Publisher: #{hash[:publisher] }\n \n"
-      i += 1
-    end
-
-  end
-
-  def view_reading_list
-    puts "no books yet"
-  end
 
 
-  def exit
-    puts "now exiting gracefully"
-    exit!
-  end
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 end
 
