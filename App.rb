@@ -51,12 +51,12 @@ class App
     puts "Type in a query to search the Google Books Api by Publication Title \n"
     input = gets.chomp
     puts "\n Now Searching..."
-    hash = api_searcher(input)
-    if (!hash)
+    parsed_response = api_searcher(input)
+    if (!parsed_response)
       search_menu
     else
       system("clear")
-      clean_data = sanitize_data(hash)
+      clean_data = sanitize_data(parsed_response)
       @search_results = clean_data
       puts "\n Done Searching! Here are Your Results\n"
       generate_output(@search_results)
@@ -114,8 +114,8 @@ class App
 
   def generate_output(array) #general method to display sanitized data from an array of hashes
     i = 1
-    array.each do |hash|
-      puts "\n #{i}. Title: #{hash[:title]} ||| Author: #{hash[:author]} ||| Publisher: #{hash[:publisher] }\n \n"
+    array.each do |book|
+      puts "\n #{i}. Title: #{book[:title]} ||| Author: #{book[:author]} ||| Publisher: #{book[:publisher] }\n \n"
       i += 1
     end
   end
@@ -144,7 +144,3 @@ class App
 
 
 end
-
-
-# add comments
-# clean up
