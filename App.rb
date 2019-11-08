@@ -18,6 +18,7 @@ class App
   end
 
   def launch
+    system("clear")
     puts "Welcome!"
     app_menu
   end
