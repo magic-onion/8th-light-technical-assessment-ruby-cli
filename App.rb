@@ -22,14 +22,6 @@ class App
     app_menu
   end
 
-
-  def menu_prompt
-    puts "\nPlease Enter one of the Commands Listed Here"
-    puts "\nenter 'search books' to query the Google Books API"
-    puts "\nenter 'view list' to view your reading list"
-    puts "\nenter 'exit' to exit this session"
-  end
-
   def app_menu
     menu_prompt
     input = ''
@@ -46,6 +38,13 @@ class App
       menu_prompt
       end
     end
+  end
+
+  def menu_prompt
+    puts "\nPlease Enter one of the Commands Listed Here"
+    puts "\nenter 'search books' to query the Google Books API"
+    puts "\nenter 'view list' to view your reading list"
+    puts "\nenter 'exit' to exit this session"
   end
 
   def search_menu #calls on ApiAdapter and DataHandler modules
@@ -91,14 +90,14 @@ class App
       @store[:saved_books].push(@search_results[selection])
       @store.commit
     end
-    puts "\n Saved to your list!"
     system("clear")
+    puts "\n Saved to your list!"
     generate_output(@search_results)
     reading_list_prompt
   end
 
 
-  def view_reading_list
+  def view_reading_list #reads from Pstore to display persisted data
     system("clear")
     @store.transaction do
       if @store[:saved_books].length === 0
@@ -122,7 +121,8 @@ class App
   end
 
   def exit
-    puts "now exiting gracefully"
+    puts "\nThanks for using this CLI!"
+    puts "\nnow exiting gracefully"
     exit!
   end
 
@@ -133,7 +133,6 @@ class App
       @store.commit
     end
   end
-
 
   def search_results_setter(array)
     @search_results = array

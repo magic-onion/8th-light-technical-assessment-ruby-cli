@@ -1,13 +1,13 @@
 module DataHandler
-  def sanitize_data(hash) #only cleans the data
+  def sanitize_data(parsed_response) #takes in parsed JSON, outputs a stable hash
     sanitized_data = []
-    if (hash["totalItems"] > 5)
+    if (parsed_response["totalItems"] > 5)
       i = 0
       until i === 5 do
         new_book = {}
-        new_book[:title] = hash["items"][i]["volumeInfo"]["title"]
-        new_book[:publisher] = hash["items"][i]["volumeInfo"]["publisher"]
-        clean_book = handle_authors(hash["items"][i]["volumeInfo"], new_book)
+        new_book[:title] = parsed_response["items"][i]["volumeInfo"]["title"]
+        new_book[:publisher] = parsed_response["items"][i]["volumeInfo"]["publisher"]
+        clean_book = handle_authors(parsed_response["items"][i]["volumeInfo"], new_book)
         if (!clean_book[:publisher])
           clean_book[:publisher]  = "Not Found"
         end
@@ -15,20 +15,23 @@ module DataHandler
         i += 1
       end
 
-    elsif (hash["totalItems"] <= 5)
+    elsif (parsed_response["totalItems"] <= 5)
       i = 0
-      until i === hash["totalItems"].length do
+      until i === parsed_response["totalItems"].length do
         new_book = {}
-        new_book[:title] = hash["items"][i]["volumeInfo"]["title"]
-        new_book[:publisher] = hash["items"][0]["volumeInfo"]["publisher"]
-        clean_book = handle_authors(hash["items"][i]["volumeInfo"], new_book)
-        sanitized_data.push(new_book)
+        new_book[:title] = parsed_response["items"][i]["volumeInfo"]["title"]
+        new_book[:publisher] = parsed_response["items"][0]["volumeInfo"]["publisher"]
+        clean_book = handle_authors(parsed_response["items"][i]["volumeInfo"], new_book)
+        if (!clean_book[:publisher])
+          clean_book[:publisher]  = "Not Found"
+        end
+        sanitized_data.push(clean_book)
       end
     end
     sanitized_data
   end
 
-  def handle_authors(volume_hash, book)
+  def handle_authors(volume_hash, book) #helper method to avoid overly clunky santitizer
     if (!volume_hash["authors"])
       book[:author] = "Not Found"
     elsif (volume_hash["authors"].length > 1)
