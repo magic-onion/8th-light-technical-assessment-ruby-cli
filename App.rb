@@ -4,7 +4,7 @@ require_relative './modules/data_handler'
 
 class App
 
-  include ApiAdapter #helpers to better separate method responsibilities
+  include ApiAdapter #helpers to better separate responsibilities
   include DataHandler
 
   def initialize()
@@ -109,7 +109,7 @@ class App
         generate_output(@store[:saved_books])
         puts "\n"
       end
-      end
+    end
     menu_prompt
   end
 
@@ -127,7 +127,7 @@ class App
     exit!
   end
 
-  #helper functions for Pstore
+  #helper functions for Pstore and instance variable
   def clear_pstore_data
     @store.transaction do
       @store[:saved_books] = []
