@@ -7,7 +7,16 @@ RSpec.describe DataHandler do
     it "returns an array" do
       app = App.new
       test_array = app.sanitize_data(app.api_searcher("harry potter"))
-      expect(test_array.length).to be_instance_of(Array)
+      expect(test_array).to be_instance_of(Array)
+
+    end
+  end
+
+  describe "sanitize_data" do
+    it "handles multiple authors" do
+      app = App.new
+      test_array = app.sanitize_data(app.api_searcher("freakonomics"))
+      expect(test_array[0]).to have_key(:author)
 
     end
   end
