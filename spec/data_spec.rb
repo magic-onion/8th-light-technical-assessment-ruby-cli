@@ -13,7 +13,7 @@ RSpec.describe DataHandler do
   end
 
   describe "sanitize_data" do
-    it "handles multiple authors" do
+    it "returns a has with a key of :author" do
       app = App.new
       test_array = app.sanitize_data(app.api_searcher("freakonomics"))
       expect(test_array[0]).to have_key(:author)
