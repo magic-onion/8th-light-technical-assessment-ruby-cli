@@ -143,5 +143,8 @@ class App
     @search_results = []
   end
 
+  def test_test
+    return "hi"
+  end
 
 end

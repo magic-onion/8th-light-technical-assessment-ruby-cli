@@ -44,4 +44,9 @@ module DataHandler
     end
     book
   end
+
+  def tester
+    return 3
+  end
+
 end
