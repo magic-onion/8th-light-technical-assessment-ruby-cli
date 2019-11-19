@@ -16,5 +16,14 @@ RSpec.describe ApiAdapter do
     end
   end
 
+  describe "api_search_by_author" do
+    it "handles invalid queries" do
+
+      test_response = @app.api_search_by_author("23947101-8434986rkjhejlkfb3p5y~!@#$%^&*()~~+@_W@)!@lkjqwdl")
+      expect(test_response).to be_instance_of(Hash)
+
+    end
+  end
+
 
 end
