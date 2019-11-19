@@ -26,5 +26,8 @@ This API Key is restricted to the Google Books API
 Simply use the command "ruby run.rb" on the command line after installation.
 
 
+**To Test**
+
+To run the test suite, enter "rspec" on the command line.
 
 I hope you enjoy it!
