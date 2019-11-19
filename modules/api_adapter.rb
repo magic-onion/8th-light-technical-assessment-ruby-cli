@@ -7,6 +7,7 @@ module ApiAdapter
     (response.code === 200 && parsed_response["totalItems"] != 0)  ? parsed_response : (puts "\nno results found, please try again \n")
   end
 
+  #new method, tested in ../spec/api_spec.rb
   def api_search_by_author(input)
     url = "https://www.googleapis.com/books/v1/volumes?q=#{input}+inauthor&key=#{API_KEY}"
     response = RestClient.get(url)
