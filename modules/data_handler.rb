@@ -1,6 +1,10 @@
 module DataHandler
   def sanitize_data(parsed_response) #takes in parsed JSON, outputs a stable hash
     sanitized_data = []
+    if (parsed_response["totalItems"] === 0)
+      sanitized_data = ["no results found"]
+      return sanitized_data
+    end
     if (parsed_response["totalItems"] > 5)
       i = 0
       until i === 5 do
