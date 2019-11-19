@@ -11,6 +11,7 @@ module ApiAdapter
     url = "https://www.googleapis.com/books/v1/volumes?q=#{input}+inauthor&key=#{API_KEY}"
     response = RestClient.get(url)
     parsed_response = JSON.parse(response)
+    parsed_response
   end
 
 
