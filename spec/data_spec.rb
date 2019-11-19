@@ -45,4 +45,18 @@ RSpec.describe DataHandler do
     end
   end
 
+  describe "sanitize_data" do
+    it "handles a search by authors" do
+      test_array = @app.sanitize_data(@app.api_search_by_author("Lewis Carroll"))
+      expect(test_array).to be_instance_of(Array)
+    end
+  end
+
+  describe "sanitize_data" do
+    it "handles weird searches-by-author without breaking" do
+      test_array = @app.sanitize_data(@app.api_search_by_author("2p39y230rhjoewhjf9p8y59208340-129!@%^&*()}"))
+      expect(terst_array).to be_instance_of(Array)
+    end
+  end
+
 end
