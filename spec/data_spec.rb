@@ -7,6 +7,7 @@ RSpec.describe DataHandler do
     @app= App.new
   end
 
+  #testing the original codebase
   describe "sanitize_data" do
     it "returns an array of hashes" do
 
@@ -45,6 +46,7 @@ RSpec.describe DataHandler do
     end
   end
 
+  #to test new search_by_authors api request
   describe "sanitize_data" do
     it "handles a search by authors" do
       test_array = @app.sanitize_data(@app.api_search_by_author("Lewis Carroll"))

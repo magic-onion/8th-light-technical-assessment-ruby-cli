@@ -7,6 +7,7 @@ RSpec.describe ApiAdapter do
     @app= App.new
   end
 
+  #these tests were written before search_by_author method was written
   describe "api_search_by_author" do
     it "returns a parsed response for author search" do
 
@@ -17,9 +18,8 @@ RSpec.describe ApiAdapter do
   end
 
   describe "api_search_by_author" do
-    it "handles invalid queries" do
-
-      test_response = @app.api_search_by_author("Stephen King")
+    it "handles unexpected queries" do
+      test_response = @app.api_search_by_author("2p39y230rhjoewhjf9p8y59208340-129!@%^&*()}")
       expect(test_response).to be_instance_of(Hash)
 
     end
