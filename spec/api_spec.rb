@@ -19,7 +19,7 @@ RSpec.describe ApiAdapter do
 
   describe "api_search_by_author" do
     it "handles unexpected queries" do
-      test_response = @app.api_search_by_author("2p39y230rhjoewhjf9p8y59208340-129!@%^&*()}")
+      test_response = @app.api_search_by_author("2p39y230rhjoewhjf9p8y59208340")
       expect(test_response).to be_instance_of(Hash)
 
     end
