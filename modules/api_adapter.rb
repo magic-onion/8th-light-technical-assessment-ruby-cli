@@ -7,5 +7,4 @@ module ApiAdapter
     (response.code === 200 && parsed_response["totalItems"] != 0)  ? parsed_response : (puts "\nno results found, please try again \n")
   end
 
-
 end
