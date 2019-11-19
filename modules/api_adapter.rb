@@ -10,7 +10,7 @@ module ApiAdapter
   def api_search_by_author(input)
     url = "https://www.googleapis.com/books/v1/volumes?q=#{input}+inauthor&key=#{API_KEY}"
     response = RestClient.get(url)
-    puts response.class
+    parsed_response = JSON.parse(response)
   end
 
 
