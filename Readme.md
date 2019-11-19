@@ -4,7 +4,7 @@ Hello, and thanks for using my cli
 
 This command line interface can:
 
-  * Type in a query to the Google Books API (by title)
+  * Allow a user to query the Google Books API (by title)
   * Display 5 results from that query that include the author, title, and publishing company
   * Allow a user to save one of the search results to a local reading list.
   * View the local reading list
